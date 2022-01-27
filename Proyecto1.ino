@@ -3,6 +3,11 @@
 #include "RTClib.h"
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+//              <-- INCLUCION DE CLASES -->
+#include "Planta.h"
+#include "ModSim.h"
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 //              <-- DEFINICION DE PINES ARDUINO -->
 #define pinled 13
 #define rst 6
@@ -13,34 +18,7 @@
 #define releP1 10
 //              <-- RED -->
 #define senRedP1 12
-//              <-- RTC -->
-RTC_DS3231 rtc;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-
-class Planta{
-  private:
-    
-  public:
-  Planta(){
-    init();
-  }
-  void init(){
-    pinMode (planta1, INPUT);
-    pinMode (senOutP1,INPUT);
-    }
-  }
-
-class ModSim{
-  private:
-  String numRoot;
-  String nameP;
   
-  public:
-  ModSim(String numRoot, String nameP){
-    this->numRoot = numRoot;
-    this->nameP = nameP;
-    }
-  void getMensaje(){}
-  void sendMensaje(){}
-  void sendAlerta(){}
-  }
+void setup(){}
+void loop(){}
