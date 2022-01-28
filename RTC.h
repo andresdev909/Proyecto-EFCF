@@ -3,11 +3,13 @@ class RTC{
   public:
     RTC()//Constructor RTC
     {
-      init()
+      init();
     }
+    //GETERS y SETERS
 
+    //Metodos
     void init()
     {
       RTC_DS3231 rtc;//Defino el objeto rtc
     }
-  }
+  };

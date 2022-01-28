@@ -9,10 +9,14 @@ class ModSim{
       this->numRoot = numRoot;
       this->nameP = nameP;
     }
-    void getMensaje()
-    {}
+    //GETERS y SETERS
+    String getNumRoot()
+    {
+      return numRoot;
+      }
+    //Metodos
     void sendMensaje()
     {}
     void sendAlerta()
     {}
-  }
+  };
