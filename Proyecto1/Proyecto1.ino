@@ -18,7 +18,7 @@ RTC_DS3231 rtc;
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 //&&&& VARIABLES GLOBALES &&&&
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-char daysOfTheWeek[7][12] = {"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
+//char daysOfTheWeek[7][12] = {"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
 
 String  MensajeEnviado,
         MensajeRecibido,
@@ -320,7 +320,7 @@ void SerialFlush ()//                                           Limpieza del buf
 }
 
 //*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-//*&&&&&&& CONFIGURACION DEL MOD SIM800L PARA MESAJES &&&&&&&*/
+//*&&&&&&& CONFIGURACION DEL MOD SIM800L PARA MENSAJES &&&&&&*/
 //*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
 
 void startArrvMsn(){
