@@ -7,10 +7,10 @@
 
 
 //Planta 1
-#define planta1 A0    
-#define releP1 10
-#define senOutP1 11
-#define senRedP1 12
+#define planta1 A0//Pin de disponible o indisponible de la planta    
+#define releP1 10//Pin de salida para activar la planta
+#define senOutP1 11//Pin de verificacion si la planta enciende o no
+#define senRedP1 12//Pin de disponibilidad de la red
 
 //#define planta2 A1
 RTC_DS3231 rtc;
@@ -83,7 +83,7 @@ void setup() {
 
   pinMode(pinled, OUTPUT);
 
-  startArrvMsn();//             Se llama a la función que verifica y configura el SIM800L para resivir mensajes
+  startArrvMsn();//             Se llama a la función que verifica y configura el SIM800L para recibir mensajes
   Serial.println(freeMemory());
   
   sendMsn("Iniciando...\n"+nameP+" "+concatText()+"Estado: "+estadoDePlanta()+"\n"+validarRandP());//Mensaje de inicio de la planta
@@ -321,6 +321,7 @@ void SerialFlush ()//                                           Limpieza del buf
 //*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
 
 void startArrvMsn(){
+      /*Si no se hace uso del reinicio automtico quitar las variables que se evaluan al final*/
       //Serial.println("Inicializando recepcion SMS...");
       delay(1000);//                                            Tiempo para que el SIM800L establezca la señal (5 segundos)
       Serial1.println("AT\n");//                                Handshake con el modulo SIM800L para comprobar su conectividad .
@@ -352,9 +353,9 @@ void startArrvMsn(){
       //Serial.println(txt3.indexOf("OK"));
       int num3 = txt3.indexOf("OK");
       //Serial.println(txt3.substring(num3, num3+2));
-      if(num1 == -1 || num2 == -1 || num3 == -1){
+      /*if(num1 == -1 || num2 == -1 || num3 == -1){
           digitalWrite(rst, HIGH);
-        }
+        }*/
   }
 
 //*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
