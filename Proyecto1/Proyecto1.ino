@@ -95,7 +95,7 @@ void setup() {
 
 void loop() {                        
 
-    if((dateModH() == 6 && dateModMn() == 00) || (dateModH() == 18 && dateModMn() == 00)){     //Horas de testeo programadas
+    if((dateModH() == 6 && dateModMn() == 00) || (dateModH() == 18 && dateModMn() == 00)){     //Horas de testeo programadas 06:00 y 18:00 hrs
       String alarm = "";
       if(estadoDePlanta() == "Indisponible" || (digitalRead(senOutP1) == 1 && digitalRead(senRedP1) == 1) || digitalRead(senRedP1) == 1){
           alarm = "ALARMA!!!\n";
@@ -103,7 +103,7 @@ void loop() {
       delay(10000);
       sendMsn(alarm+nameP+" "+concatText()+"Estado: "+estadoDePlanta()+"\n"+validarRandP()); 
       delay(20000);                  
-    }else if(dateModMn() == 30){//Testeo cada hora
+    }else if(dateModMn() == 30){        //Testeo cada hora
       
       if(estadoDePlanta() == "Indisponible"){
         //Serial.println("Estado fuera de servicio");
@@ -118,6 +118,9 @@ void loop() {
     }
     else{
       RecepcionSMS();
+      //*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+      //*&&&&&&&& VERIFICA RETORNO DE RED &&&&&&&&*/
+      //*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
       int estado = digitalRead(senRedP1);
       String alarm = "";
       if(estado == 1 && var == false){
@@ -185,11 +188,11 @@ String estadoSalidaPlanta(String var){
       for(int i=0; i < 3; i++){
         delay(timeDelay);
         int estado = "";
-        estado = digitalRead(senOutP1);
+        estado = digitalRead(senOutP1);                 //Testea la salida de la planta
         //Serial.println(estado);
         //Imprime variable estado
         
-        if(var == "encender" && estado == 0){           //Mensaje "encender" y planta Prendio
+        if(var == "encender" && estado == 0){           //Mensaje "encender" y planta encendio
           //Serial.println("Planta encendida");
           //Imprime Planta prendida
           estadoOutP = "Encendida";
@@ -229,12 +232,12 @@ String estadoDePlanta(){
       String estado = "";
       int estadoP = 0;
       
-      estadoP = digitalRead(planta1);
+      estadoP = digitalRead(planta1);//Evalua disponibilidd de planta
       
-      if(estadoP == 1){
+      if(estadoP == 1){              //Planta disponible 1
         estado = "Disponible";
         }
-        else{
+        else{                        //Planta indisponible 0
           estado = "Indisponible";
           }
           
@@ -368,15 +371,15 @@ void RecepcionSMS ()  //Funcion para la recepcion y carga de datos de SMS
     {      
       MensajeRecibido = Serial1.readStringUntil("\n");
       //Serial.println(MensajeRecibido);
-      int Size = MensajeRecibido.length();
+      int Size = MensajeRecibido.length();                    //Captura la longitud del mensaje
       //Serial.println(Size);
-      String msnText = MensajeRecibido.substring(48, Size-2);
+      String msnText = MensajeRecibido.substring(48, Size-2); //Captura el mensaje recibido
       //Serial.println(msnText);
-      String number = MensajeRecibido.substring(9, 19);
+      String number = MensajeRecibido.substring(9, 19);       //Extrae el numero que envia el mensaje
       //Serial.println(number);
       delay(200);
       //MensajeRecibido = "";
-      if(Size != 56 && Size != 58){     //Verificar para numeros desconocidos
+      if(Size != 56 && Size != 58){                           //Elimina mensaje desconocidos (raros)
       }
       else{ 
         Message(Size, msnText, number);
@@ -396,21 +399,21 @@ String validarRandP(){//Está durando (9 seg)
   String var = "";
   for(int i=0; i < 3; i++){
   delay(timeDelay);//Tiempo que se demora en enceder la planta
-  int planta = digitalRead(senOutP1);// En 0 esta encendido
+  int planta = digitalRead(senOutP1);// En 0 planta encendida
   int red = digitalRead(senRedP1);// En 0 red en servicio
   //Serial.println(planta);
   //Serial.println(red);
-  if(red == 1){
-      if(planta == 0){
+  if(red == 1){         //Evalua Red SIN servicio
+      if(planta == 0){  //Evalua (red SIN servicio - Planta Encendida)
         var = "Red: sin servicio \nPlanta: encendida";
-        }else{
+        }else{          //Evalua (red SIN servicio - Planta apagada)
           var = "Red: sin servicio \nPlanta: aapagada";
           }
 
-    }else{//Entra cuando la red entre de nuevo a funcionar
-      if(planta == 0){
+    }else{              //Evalua Red EN servicio
+      if(planta == 0){  //Evalua (red EN servicio - Planta Encendida)
         var = "Red: en servicio \nPlanta: encendida";
-        }else{
+        }else{          //Evalua (red EN servicio - Planta apagada)
           var = "Red: en servicio \nPlanta: apagada";
           }
       }
@@ -433,7 +436,7 @@ void Message(int Size, String msnText, String number){// Recepcion de datos del 
     //Imprime las varables mencionadas
     delay(1000);
 
-    if(number == numRoot && (msnText == "encender" || msnText== "apagar" || msnText== "estado")){
+    if(number == numRoot && (msnText == "encender" || msnText== "apagar" || msnText== "estado")){ //Valida el numero root y el mensaje
       validaEstado(msnText);
     }else{
       sendMsn(concatText()+"SMS invalido");
@@ -464,10 +467,10 @@ void validaEstado(String msn){
     //Imprime lo anterior mencionado
     String alarm = "";
 
-    if(msn == "encender" && estadoDePlanta() == "Disponible" &&  digitalRead(senOutP1) == 1){
+    if(msn == "encender" && estadoDePlanta() == "Disponible" &&  digitalRead(senOutP1) == 1){           //Evalua mensaje encender, estado disponible y planta apagada
       //Serial.println("Encendiendo...");
       //Imprime encendiendo...
-      digitalWrite(releP1, LOW);
+      digitalWrite(releP1, LOW);//Cierra rele
       delay(3000);
       //Serial.println("Verificando estado...");
       //imprime Verificando estado...
@@ -480,7 +483,7 @@ void validaEstado(String msn){
       sendMsn(alarm+nameP+" "+concatText()+estadoSalidaPlanta(msn));
       //sendMsn((estadoDePlanta()+". "+validarRandP()));
     }
-    else if(msn == "encender" && estadoDePlanta() == "Disponible" &&  digitalRead(senOutP1) == 0){
+    else if(msn == "encender" && estadoDePlanta() == "Disponible" &&  digitalRead(senOutP1) == 0){      //Evalua mensaje encender, estado disponible y planta encendid
       //msn Planta ya esta prendida
       if(digitalRead(senRedP1) == 1){
           alarm = "ALARMA!!!\n";
@@ -489,10 +492,10 @@ void validaEstado(String msn){
       //Serial.print(nameP+" "+concatText()+"Está encendida");
       //sendMsn((estadoDePlanta()+". "+validarRandP()));
     }
-    /*else if(msn == "encender" && estadoDePlanta() == "Indisponible" &&  digitalRead(senOutP1) == 1){
+    /*else if(msn == "encender" && estadoDePlanta() == "Indisponible" &&  digitalRead(senOutP1) == 1){  //Caso no existe, pra encender la planta debe estar disponible
       //msn Planta indisponible
     }*/
-    else if(msn == "apagar" && estadoDePlanta() == "Disponible" &&  digitalRead(senOutP1) == 0){
+    else if(msn == "apagar" && estadoDePlanta() == "Disponible" &&  digitalRead(senOutP1) == 0){        //Evalua mensaje apagar, estado disponible y planta encendida
       //Serial.println("Apagando...");
       //Imprime apagando...
       digitalWrite(releP1, HIGH);
@@ -507,7 +510,7 @@ void validaEstado(String msn){
       sendMsn(alarm+nameP+" "+concatText()+estadoSalidaPlanta(msn));
       //sendMsn((estadoDePlanta()+". "+validarRandP()));
     }
-    else if(msn == "apagar" && estadoDePlanta() == "Disponible" &&  digitalRead(senOutP1) == 1){
+    else if(msn == "apagar" && estadoDePlanta() == "Disponible" &&  digitalRead(senOutP1) == 1){        //Evalua mensaje apagar, estado disponible y planta apagada
       //msn Planta ya esta apagada
       if(digitalRead(senRedP1) == 1){
           alarm = "ALARMA!!!\n";
@@ -515,15 +518,15 @@ void validaEstado(String msn){
       sendMsn(alarm+nameP+" "+concatText()+"Estado: "+estadoDePlanta()+"\n"+validarRandP());
       //sendMsn((estadoDePlanta()+". "+validarRandP())); 
     }
-    /*else if(msn == "apagar" && estadoDePlanta() == "Indisponible" &&  digitalRead(senOutP1) == 1){
+    /*else if(msn == "apagar" && estadoDePlanta() == "Indisponible" &&  digitalRead(senOutP1) == 1){    //Caso no existe, para apagar planta debe estar disponible
       //msn Planta indisponible
     }*/
-    else if(msn == "estado"){
+    else if(msn == "estado"){                                                                             
         if(estadoDePlanta() == "Indisponible" || (digitalRead(senOutP1) == 1 && digitalRead(senRedP1) == 1) || digitalRead(senRedP1) == 1){
           alarm = "ALARMA!!!\n";
           }
         sendMsn(alarm+nameP+" "+concatText()+"Estado "+estadoDePlanta()+"\n"+validarRandP());
-    }else{//Todos los casos que no se dan se derivan aqui
+    }else{//Se evaluan todos los casos donde la planta esta indisponible
       sendMsn("ALARMA!!!\n"+nameP+" "+concatText()+"Estado: "+estadoDePlanta()+"\n"+validarRandP());
       //sendMsn((estadoDePlanta()+". "+validarRandP()));
     }
