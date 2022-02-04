@@ -1,4 +1,4 @@
-#include <SoftwareSerial.h>
+
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 //              <-- DEFINICION DE PINES ARDUINO -->
@@ -39,7 +39,7 @@ void setup(){
   moduloSim.enviarMensaje("Iniciando...\n"+moduloSim.getNameP+" "+moduloRTC.infoRTC()+"Estado: "+estadoDePlanta()+"\n"+validarRandP());//Mensaje de inicio de la planta
   led()
   }
-
+  
 void loop(){
   
   }

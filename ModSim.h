@@ -1,4 +1,4 @@
-SoftwareSerial Serial1(7, 8);// (RX - TX) Serial PARA el modulo MODSIM800L en ARDUINO
+#include <SoftwareSerial.h>
 class ModSim{
   private:
     String numRoot;//variable que contiene el numero root
@@ -10,6 +10,8 @@ class ModSim{
     {
       numRoot = numRoot;
       nameP = nameP;
+      lectura = "";
+      SoftwareSerial Serial1(7, 8);// (RX - TX) Serial PARA el modulo MODSIM800L en ARDUINO
       }
     //GETERS y SETERS
     String getNumRoot(){return(numRoot);}//Captura el numero rootdel modSIM
@@ -35,7 +37,7 @@ class ModSim{
       return(msm);
       }
     
-    void handShake()//Capturalo que este leyendo el serialdel modSIM
+    void capturarMensaje()//Capturalo que este leyendo el serialdel modSIM <-- Antes: Handshake
     {
       delay(500);
       setLectura("");
@@ -87,7 +89,7 @@ class ModSim{
         }*/
       }
       
-    void RecepcionSMS ()  //Funcion para la recepcion y carga de datos de SMS
+    void esperandoMensaje()  //Funcion para la recepcion y carga de datos de SMS <-- Antes: ReceocionSMS
     {          
         if (Serial1.available())
         {      
@@ -112,7 +114,7 @@ class ModSim{
           
     }
 
-    String Message(int Size, String msnText, String number)
+    String validarMensaje(int Size, String msnText, String number)//<-- Antes: Message
     {
         //Serial.print("size: "); 
         //Serial.println(Size);
@@ -142,7 +144,7 @@ class ModSim{
           
     }
 
-    void enviarMensaje(String estate) //Funcion para el envio de mensaje
+    void enviarMensaje(String estate) //Funcion para el envio de mensaje <-- Antes: sendMsn
     { 
       //Serial.println("Enviando mensaje...");
       //SerialFlush();
