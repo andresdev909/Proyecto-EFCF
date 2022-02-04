@@ -1,15 +1,28 @@
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+//              <-- DEFINICION DE PINES ARDUINO -->
+#define sensorDeRed 12;
+
 class Red{
   private:
+  int estadoDeRed;
+  
   public:
     Red()
     {
+      estadoDeRed = 0;
       init();
       }
+      
     //GETERSy SETERS
-    void init(){
-      pinMode(senRedP1, INPUT);
+    int getEstadoRed()
+    {
+      estadoDeRed = digitalRead(sensorDeRed)
+      return(estadoDeRed);
       }
+      
     //Metodos
-    void getEstadoRed()
-    {}
+    void init()
+    {
+      pinMode(sensorDeRed, INPUT);
+      }
   }
