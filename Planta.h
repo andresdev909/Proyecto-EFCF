@@ -52,51 +52,32 @@ class Planta{
       }
       
     String validarSalidaPlanta(String var){
-      //delay(3000);
       String estadoOutP = "";
-      //delay(3000);
-
-      for(int i=0; i < 3; i++){
+      for(int i=0; i < 3; i++)
+      {
         delay(1000);
         int estado = getSalidaPlanta();
-        //Serial.println(estado);
-        //Imprime variable estado
         
         if(var == "encender" && estado == 0)
         {
-          //Mensaje "encender" y planta Prendio
-          //Serial.println("Planta encendida");
-          //Imprime Planta prendida
           estadoOutP = "Encendida";
           }
           else if(var == "apagar" && estado == 1)
           {
-            //Mensaje "apagar" y planta apago
-            //Serial.println("Planta apagada");
-            //Imprime Planta apagada
             estadoOutP = "Apagada";
             }
             else if(var == "encender" && estado == 1)
             {
-              //Mensaje "encender" y planta no prendio
-              //Serial.println("Planta NO encendio");
-              //Imprime Planta no encendió
               estadoOutP = "NO encendio";
               }
               else if(var == "apagar" && estado == 0)
               {
-                //Mensaje "apagar" y planta no apago
-                //Serial.println("Planta NO apago");
-                //Imprime Planta no apagó
-                //digitalWrite(releP1, HIGH);
                 estadoOutP = "NO apago";
                 }
         }
       if(estadoOutP == "NO encendio")//<-- Revisar como evaluar RELE
         digitalWrite(releP1, HIGH);
         }else if(estadoOutP == "NO apago"){
-          //digitalWrite(releP1, LOW);                    //Validar estado de la red
-          //validarRandP();
           }
        
       return estadoOutP;
