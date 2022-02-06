@@ -78,7 +78,7 @@ class RTC{
       return  secondMod;
       }
 
-    String infoRTC()
+    static String infoRTC()
     {
       String textoMsn = "";
       String  dateY = (String)dateModY(), 

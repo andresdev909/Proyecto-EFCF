@@ -51,7 +51,7 @@ class Planta{
       return estado;
       }
       
-    String validarSalidaPlanta(String var){
+    String validarSalidaPlanta(String var){//Antes: <- EstadoSalidaPlanta
       String estadoOutP = "";
       for(int i=0; i < 3; i++)
       {

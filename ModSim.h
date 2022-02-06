@@ -81,17 +81,17 @@ class ModSim{
           
     }
 
-    String validarMensaje(int Size, String msnText, String number)//<-- Antes: Message
+    void validarMensaje(int Size, String msnText, String number)//<-- Antes: Message
     {
         delay(1000);
     
         if(number == numRoot && (msnText == "encender" || msnText== "apagar" || msnText== "estado"))
         {
-          return(msnText);
+          validaEstado(msnText);
           }
           else
           {
-            return("SMS invalido");
+            enviarMensaje(infoRTC()+"SMS invalido");
             }
           
     }

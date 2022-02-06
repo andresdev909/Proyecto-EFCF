@@ -36,10 +36,11 @@ void setup(){
   RTC moduloRTC();//<--Definicion objeto Modulo RTC
   Planta planta();
   Red red();
+  Rele rele();
   //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&FIN&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& 
   
   moduloSim.prepararRecepcionSMS();//Se llama a la función que verifica y configura el SIM800L para resivir mensajes
-  moduloSim.enviarMensaje("Iniciando...\n"+moduloSim.getNameP+" "+moduloRTC.infoRTC()+"Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRandP());//Mensaje de inicio de la planta
+  moduloSim.enviarMensaje("Iniciando...\n"+moduloSim.getNameP+" "+moduloRTC.infoRTC()+"Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRedYPlanta());//Mensaje de inicio de la planta
   led()
   }
   
@@ -86,6 +87,122 @@ void loop(){
             }
         }
     
+  }
+
+//*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+//*&&&&&&& VALIDAR RED Y PLANTA &&&&&&&*/
+//*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+
+String validarRedYPlanta(){//Está durando (9 seg)
+  String var = "";
+  for(int i=0; i < 3; i++){
+    
+    delay(1000);//Tiempo que se demora en enceder la planta
+    int planta = planta.getSalidaPlanta();// En 0 esta encendido
+    int red = red.getEstadoRed();// En 0 red en servicio
+    
+    if(red == 1){
+        if(planta == 0){
+          var = "Red: sin servicio \nPlanta: encendida";
+          }
+          else
+          {
+            var = "Red: sin servicio \nPlanta: aapagada";
+            }
+
+      }
+      else//Entra cuando la red entre de nuevo a funcionar
+      {
+        if(planta == 0)
+        {
+          var = "Red: en servicio \nPlanta: encendida";
+          }
+          else
+          {
+            var = "Red: en servicio \nPlanta: apagada";
+            }
+      }
+    }
+    
+  return var;
+  }
+
+//*&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+//*&&&&&&& ESTADO PLANTA &&&&&&*/
+//*&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+
+public static void validaEstado(String mensaje){
+
+    if(mensaje == "encender" && planta.disponibilidadDePlanta() == "Disponible" &&  planta.getSalidaPlanta() == 1){
+
+      rele.setEstadoRele(LOW)
+      delay(3000);
+      moduloSim.enviarMensaje(moduloSim.getNameP()+" "+rtc.infoRTC()+"Validando estado");
+      
+      if(planta.validarSalidaPlanta(mensaje) == "NO encendio" || red.getEstadoRed() == 1)
+      {
+          moduloSim.enviarMensaje(moduloSim.alerta(rtc.infoRTC(), planta.validarSalidaPlanta(mensaje)));
+        }
+        else
+        {
+          moduloSim.enviarMensaje(moduloSim.mensaje(rtc.infoRTC(), planta.validarSalidaPlanta(mensaje)));
+          }
+      }
+      else if(mensaje == "encender" && planta.disponibilidadDePlanta() == "Disponible" &&  planta.getSalidaPlanta() == 0)
+      {
+        if(rele.getEstadoRele() == 1)
+        {
+          moduloSim.enviarMensaje(moduloSim.alerta(rtc.infoRTC(), "Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRedYPlanta()));
+          }
+          else
+          {
+            moduloSim.enviarMensaje(moduloSim.mensaje(rtc.infoRTC(), "Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRedYPlanta()));
+            }
+
+        }
+        else if(mensaje == "apagar" && planta.disponibilidadDePlanta() == "Disponible" &&  planta.getSalidaPlanta() == 0)
+        {
+          digitalWrite(releP1, HIGH);
+          delay(3000);
+          moduloSim.enviarMensaje(moduloSim.mensaje(rtc.infoRTC(), "Validando estado"));
+   
+          if(planta.validarSalidaPlanta(mensaje) == "NO apago" || red.getEstadoRed() == 1)
+          {
+              moduloSim.enviarMensaje(moduloSim.alerta(rtc.infoRTC(), planta.validarSalidaPlanta(mensaje)));
+            }
+            else
+            {
+              moduloSim.enviarMensaje(moduloSim.mensaje(rtc.infoRTC(), planta.validarSalidaPlanta(mensaje)));
+              }
+
+          }
+          else if(mensaje == "apagar" && planta.disponibilidadDePlanta() == "Disponible" &&  planta.getSalidaPlanta() == 1)
+          {
+            if(red.getEstadoRed() == 1)
+            {
+              moduloSim.enviarMensaje(moduloSim.alerta(rtc.infoRTC(), "Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRedYPlanta()));
+              }
+              else
+              {
+                moduloSim.enviarMensaje(moduloSim.mensaje(rtc.infoRTC(), "Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRedYPlanta()));
+                }
+
+            }
+            else if(mensaje == "estado")
+            {
+              if(planta.disponibilidadDePlanta() == "Indisponible" || (planta.getSalidaPlanta() == 1 && red.getEstadoRed() == 1) || red.getEstadoRed() == 1)
+              {
+                moduloSim.enviarMensaje(moduloSim.alerta(rtc.infoRTC(), "Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRedYPlanta()));
+                }
+                else
+                {
+                  moduloSim.enviarMensaje(moduloSim.mensaje(rtc.infoRTC(), "Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRedYPlanta()));
+                  }
+              }
+              else//Todos los casos que no se dan se derivan aqui
+              {
+                moduloSim.enviarMensaje(moduloSim.alerta(rtc.infoRTC(), "Estado: "+planta.disponibilidadDePlanta()+"\n"+validarRedYPlanta()));
+                }
   }
 
 //*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
