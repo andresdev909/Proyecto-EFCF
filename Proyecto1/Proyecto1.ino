@@ -407,7 +407,7 @@ String validarRandP(){//Está durando (9 seg)
       if(planta == 0){  //Evalua (red SIN servicio - Planta Encendida)
         var = "Red: sin servicio \nPlanta: encendida";
         }else{          //Evalua (red SIN servicio - Planta apagada)
-          var = "Red: sin servicio \nPlanta: aapagada";
+          var = "Red: sin servicio \nPlanta: apagada";
           }
 
     }else{              //Evalua Red EN servicio
